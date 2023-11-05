@@ -1,0 +1,7 @@
+## Interface: 11201
+## Title: |cffff8000T-OoM|r |cffff0000[Early beta: 0.1b]|r
+## Author: Mikhail Palagin (Wht Mst)
+## Version: 0.1b [Early beta]
+## Notes: |cffff8000T-OoM|r is a simple Out of Mana announcer addon for |cff00ff00Turtle WoW|r. Made with love by Wht Mst.
+
+T-OoM.lua
