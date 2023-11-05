@@ -4,6 +4,7 @@ EN: T-OoM - is a simple Out of Mana announcer addon for Turtle WoW.
 
 RU: T-OoM - это простой аддон для объявления об окончании маны для сервера Turtle WoW.
 
+---
 
 # T-OoM: Download
 ### Installation (Turtle WoW)
@@ -21,6 +22,13 @@ RU: T-OoM - это простой аддон для объявления об о
 4. Скопируйте папку "T-OoM" в \Interface\AddOns
 5. Перезапустите игру
 
+---
+
+# T-OoM: Settings / Настройки
+
+
+
+---
 
 # T-OoM: Credits / Благодарности
 
