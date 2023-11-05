@@ -8,6 +8,6 @@ RU: T-OoM - это простой аддон для объявления об о
 ## Installation (Turtle WoW)
 1. Download **[Latest Version](https://github.com/whtmst/t-oom/archive/master.zip)**
 2. Unpack the Zip file
-3. Rename the folder "pfUI-master" to "pfUI"
+3. Rename the folder "t-oom-main" to "t-oom"
 4. Copy "pfUI" into Wow-Directory\Interface\AddOns
 5. Restart Wow
