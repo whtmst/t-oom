@@ -10,12 +10,12 @@ Website: https://band.link/whtmst
 
 
 -- SETTINGS (НАСТРОЙКИ)
+local lowManaMsg = "--- LOW ON MANA ---"  -- Message at 30% of mana (Сообщение при 30% маны)
+local criticalLowManaMsg = "--- CRITICAL LOW MANA ---"  -- Message at 15% of mana (Сообщение при 15% маны)
 local outOfManaMessage = "--- OUT OF MANA ---"  -- Message at 5% of mana (Сообщение при 5% маны)
-local lowManaMessage = "--- LOW MANA ---"  -- Message at 25% of mana (Сообщение при 25% маны)
-local mana50Message = "--- MANA IS 50% ---"  -- Message at 50% of mana (Сообщение при 50% маны)
 local chatChannel = "PARTY"  -- You can change the channel, for example, to "RAID" or "SAY" (channel for sending messages) (Вы можете изменить чат, например, на "RAID" или "SAY" (чат для отправки сообщений))
-local lowManaThreshold1 = 0.50 -- Threshold 50% of mana (Порог 50% маны)
-local lowManaThreshold2 = 0.25 -- Threshold 25% of mana (Порог 25% маны)
+local lowManaThreshold1 = 0.30 -- Threshold 30% of mana (Порог 30% маны)
+local lowManaThreshold2 = 0.15 -- Threshold 15% of mana (Порог 15% маны)
 local lowManaThreshold3 = 0.05 -- Threshold 5% of mana (Порог 5% маны)
 local messageDuration = 3  -- Message display duration in seconds (Время отображения сообщения в секундах)
 local fontSize = 96  -- Font size for the custom message (Размер шрифта для собственного сообщения)
@@ -24,6 +24,7 @@ local fontColor = {1, 1, 1, 1}  -- Font color with transparency (Цвет шри
 local fontPath = "Interface\\AddOns\\T-OoM\\Fonts\\ARIALN.ttf"  -- File path to the custom font (Путь к файлу собственного шрифта)
 
 
+-- MAIN CODE (ОСНОВНОЙ КОД)
 local T_OoM = CreateFrame("Frame")
 
 -- Initialize variables (Инициализация переменных)
@@ -89,11 +90,11 @@ T_OoM:SetScript("OnUpdate", function()
             SendChatMessage(outOfManaMessage, chatChannel)
             ShowCustomMessage(outOfManaMessage)
         elseif manaPercentage <= lowManaThreshold2 and manaPercentage > lowManaThreshold3 and lastManaPercentage > lowManaThreshold2 then
-            SendChatMessage(lowManaMessage, chatChannel)
-            ShowCustomMessage(lowManaMessage)
+            SendChatMessage(criticalLowManaMsg, chatChannel)
+            ShowCustomMessage(criticalLowManaMsg)
         elseif manaPercentage <= lowManaThreshold1 and manaPercentage > lowManaThreshold2 and lastManaPercentage > lowManaThreshold1 then
-            SendChatMessage(mana50Message, chatChannel)
-            ShowCustomMessage(mana50Message)
+            SendChatMessage(lowManaMsg, chatChannel)
+            ShowCustomMessage(lowManaMsg)
         end
     else
         HideCustomMessage()
