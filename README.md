@@ -61,3 +61,13 @@ EN: I do not create add-ons on request and do not fix errors in other add-ons, p
 
 RU: Я не пишу аддоны на заказ и не исправляю ошибки в других аддонах, просьба не писать мне с такими вопросами.
 
+---
+
+<h3 align="center">Wow, finished reading!😌 Hit me up if anything!</h3>
+
+---
+<p align="center">
+    <a href="https://www.donationalerts.com/r/whtmst"><img src="https://img.shields.io/static/v1?logo=BUY-ME-A-COFFEE&label=&labelColor=131313&logoColor=FFFFFF&logoWidth=20&message=BUY ME A COFFEE&color=FFDD00&style=flat-square" alt="BUY ME A COFFEE" height="25"></a>
+    <a href="https://boosty.to/whtmst"><img src="https://img.shields.io/static/v1?logo=COFFEESCRIPT&label=&labelColor=131313&logoColor=FFFFFF&logoWidth=20&message=BOOSTY&color=6C71D3&style=flat-square" alt="BOOSTY" height="25"></a>
+</p>
+
