@@ -52,3 +52,12 @@ RU: Все настройки храняться в файле "T-OoM.lua" в б
 EN: You are welcome to enhance this addon, but you must always provide a link to the original version at **[https://github.com/whtmst/t-oom](https://github.com/whtmst/t-oom)**.
 
 RU: Вы можете усовершенствовать данный аддон, но вы обязаны всегда предоставлять ссылку на оригинальную версию по адресу **[https://github.com/whtmst/t-oom](https://github.com/whtmst/t-oom)**.
+
+---
+
+# T-OoM: IMPORTANT / ВАЖНО
+
+EN: I do not create add-ons on request and do not fix errors in other add-ons, please do not contact me with such requests.
+
+RU: Я не пишу аддоны на заказ и не исправляю ошибки в других аддонах, просьба не писать мне с такими вопросами.
+
