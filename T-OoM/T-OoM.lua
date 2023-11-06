@@ -31,6 +31,7 @@ local T_OoM = CreateFrame("Frame")
 local customFrame
 local currentMessage = ""
 local lastUpdateTime = 0
+local lastManaPercentage = 0
 
 -- Create a custom frame (Создание собственного фрейма)
 local function CreateCustomFrame()
