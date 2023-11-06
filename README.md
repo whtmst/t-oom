@@ -32,9 +32,9 @@ RU: Все настройки храняться в файле "T-OoM.lua" в б
 
 ---
 
+* local lowManaMsg = "--- LOW ON MANA ---"  -- Message at 30% of mana (Сообщение при 30% маны)
+* local criticalLowManaMsg = "--- CRITICAL LOW MANA ---"  -- Message at 15% of mana (Сообщение при 15% маны)
 * local outOfManaMessage = "--- OUT OF MANA ---"  -- Message at 5% of mana (Сообщение при 5% маны)
-* local lowManaMessage = "--- LOW MANA ---"  -- Message at 25% of mana (Сообщение при 25% маны)
-* local mana50Message = "--- MANA IS 50% ---"  -- Message at 50% of mana (Сообщение при 50% маны)
 * local chatChannel = "PARTY"  -- You can change the channel, for example, to "RAID" or "SAY" (channel for sending messages) (Вы можете изменить чат, например, на "RAID" или "SAY" (чат для отправки сообщений))
 * local lowManaThreshold1 = 0.50 -- Threshold 50% of mana (Порог 50% маны)
 * local lowManaThreshold2 = 0.25 -- Threshold 25% of mana (Порог 25% маны)
