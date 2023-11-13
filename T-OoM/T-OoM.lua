@@ -23,6 +23,17 @@ local frameColor = {0, 0, 0, 0}  -- Frame color with transparency (Цвет фр
 local fontColor = {1, 1, 1, 1}  -- Font color with transparency (Цвет шрифта с прозрачностью)
 local fontPath = "Interface\\AddOns\\T-OoM\\Fonts\\ARIALN.ttf"  -- File path to the custom font (Путь к файлу собственного шрифта)
 
+-- Set to true to enable the respective instance type (Установите true, чтобы включить соответствующий тип инстанса)
+local instanceTypeOptions = { 
+    none = false, -- When outside an instance (В открытом мире)
+    party = true, -- In 5-man instances (В подземельях на 5-человек)
+    raid = false, -- In raid instances (В рейдах)
+    arena = false, -- In arenas (На арене)
+    pvp = false, -- In battlegrounds (На полях боя)
+    scenario = false -- In scenarios (В сценариях)
+}
+
+
 
 -- MAIN CODE (ОСНОВНОЙ КОД)
 local T_OoM = CreateFrame("Frame")
@@ -32,6 +43,8 @@ local customFrame
 local currentMessage = ""
 local lastUpdateTime = 0
 local lastManaPercentage = 0
+local inInstance = false
+local instanceType = ""
 
 -- Create a custom frame (Создание собственного фрейма)
 local function CreateCustomFrame()
@@ -77,37 +90,6 @@ local function HideCustomMessage()
     end
 end
 
--- Update function (Функция обновления)
-T_OoM:SetScript("OnUpdate", function()
-    local unit = "player"
-    local powerType = UnitPowerType(unit)
-    local powerToken = (powerType == 0) and "MANA" or "UNKNOWN"
-    local currentMana = UnitMana(unit)
-    local maxMana = UnitManaMax(unit)
-    local manaPercentage = currentMana / maxMana
-
-    if powerToken == "MANA" then
-        if manaPercentage <= lowManaThreshold3 and lastManaPercentage > lowManaThreshold3 then
-            SendChatMessage(outOfManaMessage, chatChannel)
-            ShowCustomMessage(outOfManaMessage)
-        elseif manaPercentage <= lowManaThreshold2 and manaPercentage > lowManaThreshold3 and lastManaPercentage > lowManaThreshold2 then
-            SendChatMessage(criticalLowManaMsg, chatChannel)
-            ShowCustomMessage(criticalLowManaMsg)
-        elseif manaPercentage <= lowManaThreshold1 and manaPercentage > lowManaThreshold2 and lastManaPercentage > lowManaThreshold1 then
-            SendChatMessage(lowManaMsg, chatChannel)
-            ShowCustomMessage(lowManaMsg)
-        end
-    else
-        HideCustomMessage()
-    end
-
-    if currentMessage ~= "" and GetTime() - lastUpdateTime >= messageDuration then
-        HideCustomMessage()
-    end
-
-    lastManaPercentage = manaPercentage
-end)
-
 -- On player login (При входе игрока)
 local function OnPlayerLogin()
     local title = GetAddOnMetadata("T-OoM", "Title")
@@ -119,5 +101,76 @@ local function OnPlayerLogin()
     DEFAULT_CHAT_FRAME:AddMessage(message)
 end
 
+-- World/Instance/Graveyard entering or leaves function (Функция входа/выхода игрока в мир, инстанс или на кладбище)
+local function OnEnteringWorld()
+	inInstance, instanceType = IsInInstance()
+
+	--[[ DEBUG MESSAGE
+	if inInstance then
+		print("--- YOU ARE IN AN INSTANCE NOW ---")
+		print("--- INSTANCE TYPE: " .. instanceType .. " ---")
+	else
+		print("--- YOU ARE IN AN OUTDOOR NOW ---")
+	end
+	--]]
+end
+
+-- Update function (Функция обновления)
+T_OoM:SetScript("OnUpdate", function()
+    local unit = "player"
+    local powerType = UnitPowerType(unit)
+    local powerToken = (powerType == 0) and "MANA" or "UNKNOWN"
+    local currentMana = UnitMana(unit)
+    local maxMana = UnitManaMax(unit)
+    local manaPercentage = currentMana / maxMana
+
+    if instanceTypeOptions[instanceType] then
+        if powerToken == "MANA" then
+            if manaPercentage <= lowManaThreshold3 and lastManaPercentage > lowManaThreshold3 then
+                SendChatMessage(outOfManaMessage, chatChannel)
+                ShowCustomMessage(outOfManaMessage)
+            elseif manaPercentage <= lowManaThreshold2 and manaPercentage > lowManaThreshold3 and lastManaPercentage > lowManaThreshold2 then
+                SendChatMessage(criticalLowManaMsg, chatChannel)
+                ShowCustomMessage(criticalLowManaMsg)
+            elseif manaPercentage <= lowManaThreshold1 and manaPercentage > lowManaThreshold2 and lastManaPercentage > lowManaThreshold1 then
+                SendChatMessage(lowManaMsg, chatChannel)
+                ShowCustomMessage(lowManaMsg)
+            end
+        else
+            HideCustomMessage()
+        end
+    else
+        if powerToken == "MANA" then
+            if manaPercentage <= lowManaThreshold3 and lastManaPercentage > lowManaThreshold3 then
+                ShowCustomMessage(outOfManaMessage)
+            elseif manaPercentage <= lowManaThreshold2 and manaPercentage > lowManaThreshold3 and lastManaPercentage > lowManaThreshold2 then
+                ShowCustomMessage(criticalLowManaMsg)
+            elseif manaPercentage <= lowManaThreshold1 and manaPercentage > lowManaThreshold2 and lastManaPercentage > lowManaThreshold1 then
+                ShowCustomMessage(lowManaMsg)
+            end
+        else
+            HideCustomMessage()
+        end
+    end
+
+    if currentMessage ~= "" and GetTime() - lastUpdateTime >= messageDuration then
+        HideCustomMessage()
+    end
+
+    lastManaPercentage = manaPercentage
+end)
+
+-- Register events (Регистрация событий)
 T_OoM:RegisterEvent("PLAYER_LOGIN")
-T_OoM:SetScript("OnEvent", OnPlayerLogin)
+T_OoM:RegisterEvent("PLAYER_ENTERING_WORLD")
+
+-- Set event handlers (Установка обработчиков событий)
+T_OoM:SetScript("OnEvent", function()
+    if event == "PLAYER_LOGIN" then
+        OnPlayerLogin()
+		-- print("Event 'PLAYER_LOGIN' handled")
+    elseif event == "PLAYER_ENTERING_WORLD" then
+        OnEnteringWorld()
+		-- print("Event 'PLAYER_ENTERING_WORLD' handled")
+    end
+end)
