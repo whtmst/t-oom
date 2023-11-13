@@ -45,6 +45,16 @@ RU: Все настройки храняться в файле "T-OoM.lua" в б
 * local fontColor = {1, 1, 1, 1}  -- Font color with transparency (Цвет шрифта с прозрачностью)
 * local fontPath = "Interface\\AddOns\\T-OoM\\Fonts\\ARIALN.ttf"  -- File path to the custom font (Путь к файлу собственного шрифта)
 
+**Set to true to enable the respective instance type (Установите true, чтобы включить соответствующий тип инстанса)**
+* local instanceTypeOptions = { 
+    * none = false, -- When outside an instance (В открытом мире)
+    * party = true, -- In 5-man instances (В подземельях на 5-человек)
+    * raid = false, -- In raid instances (В рейдах)
+    * arena = false, -- In arenas (На арене)
+    * pvp = false, -- In battlegrounds (На полях боя)
+    * scenario = false -- In scenarios (В сценариях)
+* }
+
 ---
 
 # T-OoM: Credits / Благодарности
