@@ -13,7 +13,7 @@ Website: https://band.link/whtmst
 local lowManaMsg = "--- LOW ON MANA ---"  -- Message at 30% of mana (Сообщение при 30% маны)
 local criticalLowManaMsg = "--- CRITICAL LOW MANA ---"  -- Message at 15% of mana (Сообщение при 15% маны)
 local outOfManaMessage = "--- OUT OF MANA ---"  -- Message at 5% of mana (Сообщение при 5% маны)
-local chatChannel = "PARTY"  -- You can change the channel, for example, to "RAID" or "SAY" (channel for sending messages) (Вы можете изменить чат, например, на "RAID" или "SAY" (чат для отправки сообщений))
+local chatChannel = "SAY"  -- You can change the channel, for example, to "PARTY" or "RAID" (channel for sending messages) (Вы можете изменить чат, например, на "PARTY" или "RAID" (чат для отправки сообщений))
 local lowManaThreshold1 = 0.30 -- Threshold 30% of mana (Порог 30% маны)
 local lowManaThreshold2 = 0.15 -- Threshold 15% of mana (Порог 15% маны)
 local lowManaThreshold3 = 0.05 -- Threshold 5% of mana (Порог 5% маны)
