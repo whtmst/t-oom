@@ -32,31 +32,6 @@ RU: Все настройки храняться в файле "T-OoM.lua" в б
 
 ---
 
-* local lowManaMsg = "--- LOW ON MANA ---"  -- Message at 30% of mana (Сообщение при 30% маны)
-* local criticalLowManaMsg = "--- CRITICAL LOW MANA ---"  -- Message at 15% of mana (Сообщение при 15% маны)
-* local outOfManaMessage = "--- OUT OF MANA ---"  -- Message at 5% of mana (Сообщение при 5% маны)
-* local chatChannel = "SAY"  -- You can change the channel, for example, to "PARTY" or "RAID" (channel for sending messages) (Вы можете изменить чат, например, на "PARTY" или "RAID" (чат для отправки сообщений))
-* local lowManaThreshold1 = 0.30 -- Threshold 30% of mana (Порог 30% маны)
-* local lowManaThreshold2 = 0.15 -- Threshold 15% of mana (Порог 15% маны)
-* local lowManaThreshold3 = 0.05 -- Threshold 5% of mana (Порог 5% маны)
-* local messageDuration = 3  -- Message display duration in seconds (Время отображения сообщения в секундах)
-* local fontSize = 96  -- Font size for the custom message (Размер шрифта для собственного сообщения)
-* local frameColor = {0, 0, 0, 0}  -- Frame color with transparency (Цвет фрейма с прозрачностью)
-* local fontColor = {1, 1, 1, 1}  -- Font color with transparency (Цвет шрифта с прозрачностью)
-* local fontPath = "Interface\\AddOns\\T-OoM\\Fonts\\ARIALN.ttf"  -- File path to the custom font (Путь к файлу собственного шрифта)
-
-**Set to true to enable the respective instance type (Установите true, чтобы включить соответствующий тип инстанса)**
-* local instanceTypeOptions = { 
-    * none = false, -- When outside an instance (В открытом мире)
-    * party = true, -- In 5-man instances (В подземельях на 5-человек)
-    * raid = false, -- In raid instances (В рейдах)
-    * arena = false, -- In arenas (На арене)
-    * pvp = false, -- In battlegrounds (На полях боя)
-    * scenario = false -- In scenarios (В сценариях)
-* }
-
----
-
 # T-OoM: Credits / Благодарности
 
 EN: You are welcome to enhance this addon, but you must always provide a link to the original version at **[https://github.com/whtmst/t-oom](https://github.com/whtmst/t-oom)**.
