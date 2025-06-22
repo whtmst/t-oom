@@ -48,11 +48,11 @@ RU: Я не пишу аддоны на заказ и не исправляю о�
 
 ---
 
-<h3 align=`center`>Wow, finished reading!😌 Hit me up if anything!</h3>
+<h3 align="center">Wow, finished reading!😌 Hit me up if anything!</h3>
 
 ---
 
-<div align=`center`>
+<div align="center">
 
 ### **💝 Support me / Поддержи меня**
 💰 [**[ DonationAlerts ]**](https://www.donationalerts.com/r/whtmst) • 🚀 [**[ Boosty ]**](https://boosty.to/whtmst)
@@ -61,7 +61,7 @@ RU: Я не пишу аддоны на заказ и не исправляю о�
 
 ---
 
-<div align=`center`>
+<div align="center">
 
 **This repository is distributed under the [MIT License](LICENSE)**
 
