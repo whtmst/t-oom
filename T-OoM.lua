@@ -21,7 +21,7 @@ local messageDuration = 3  -- Message display duration in seconds (Время о
 local fontSize = 96  -- Font size for the custom message (Размер шрифта для собственного сообщения)
 local frameColor = {0, 0, 0, 0}  -- Frame color with transparency (Цвет фрейма с прозрачностью)
 local fontColor = {1, 1, 1, 1}  -- Font color with transparency (Цвет шрифта с прозрачностью)
-local fontPath = "Interface\\AddOns\\T-OoM\\Fonts\\ARIALN.ttf"  -- File path to the custom font (Путь к файлу собственного шрифта)
+local fontPath = "Interface\\AddOns\\T-OoM\\fonts\\ARIALN.ttf"  -- File path to the custom font (Путь к файлу собственного шрифта)
 
 -- Set to true to enable the respective instance type (Установите true, чтобы включить соответствующий тип инстанса)
 local instanceTypeOptions = { 
