@@ -1,0 +1,10 @@
+# Lua Language Server type definitions
+T-OoM/wow-api-type-definitions/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
