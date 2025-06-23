@@ -3,6 +3,7 @@ wow-api-type-definitions/
 
 # GitHub configuration and workflows
 .github/
+tests/
 
 # IDE files
 .vscode/

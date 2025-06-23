@@ -3,5 +3,11 @@
 ## Author: Mikhail Palagin (Wht Mst)
 ## Version: 1.0.0 Beta
 ## Notes: |cFF11A6ECT-OoM|r is a simple Out of Mana announcer addon for |cff00ff00Turtle WoW|r. Made with love by Wht Mst.
+## SavedVariables: T_OoM_Settings
 
+## Core modules
+modules\loader.lua
+modules\settings.lua
+
+## Main addon file
 T-OoM.lua
