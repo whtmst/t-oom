@@ -9,6 +9,9 @@ if not T_OoM_Modules then
     T_OoM_Modules = {}
 end
 
+-- Debug message to confirm loader.lua is executed
+DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6EC[T-OoM]|r loader.lua loaded successfully!")
+
 -- Module loader utility functions
 T_OoM_Modules.Loader = {}
 
@@ -20,10 +23,9 @@ function T_OoM_Modules.Loader:RegisterModule(name, module)
     end
     
     T_OoM_Modules[name] = module
-    
-    -- Call module initialization if available
+      -- Call module initialization if available
     if module.Initialize and type(module.Initialize) == "function" then
-        local success, err = pcall(module.Initialize)
+        local success, err = pcall(module.Initialize, module)
         if not success then
             DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r Failed to initialize module '" .. name .. "': " .. tostring(err))
         else
@@ -45,9 +47,8 @@ end
 
 -- Initialize all modules (called after all modules are loaded)
 function T_OoM_Modules.Loader:InitializeAll()
-    for name, module in pairs(T_OoM_Modules) do
-        if name ~= "Loader" and module.PostInitialize and type(module.PostInitialize) == "function" then
-            local success, err = pcall(module.PostInitialize)
+    for name, module in pairs(T_OoM_Modules) do        if name ~= "Loader" and module.PostInitialize and type(module.PostInitialize) == "function" then
+            local success, err = pcall(module.PostInitialize, module)
             if not success then
                 DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r Failed to post-initialize module '" .. name .. "': " .. tostring(err))
             end

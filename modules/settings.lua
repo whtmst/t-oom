@@ -50,6 +50,9 @@ local DEFAULT_SETTINGS = {
 -- Settings module
 local Settings = {}
 
+-- Debug message to confirm settings.lua is executed
+DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6EC[T-OoM]|r settings.lua loaded successfully!")
+
 -- Initialize settings from SavedVariables or defaults
 function Settings:Initialize()
     -- Create SavedVariables if it doesn't exist

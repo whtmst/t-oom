@@ -9,5 +9,8 @@
 modules\loader.lua
 modules\settings.lua
 
+## Test modules (development only)
+tests\test_module.lua
+
 ## Main addon file
 T-OoM.lua

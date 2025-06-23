@@ -18,6 +18,15 @@ Compatibility:
 -- Эти настройки теперь загружаются из модуля Settings, но оставлены здесь для справки
 
 -- MAIN CODE (ОСНОВНОЙ КОД)
+
+-- Debug: Check module loading status
+DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6EC[T-OoM]|r Main file loaded. Modules status:")
+DEFAULT_CHAT_FRAME:AddMessage("  T_OoM_Modules: " .. (T_OoM_Modules and "OK" or "MISSING"))
+if T_OoM_Modules then
+    DEFAULT_CHAT_FRAME:AddMessage("  Loader: " .. (T_OoM_Modules.Loader and "OK" or "MISSING"))
+    DEFAULT_CHAT_FRAME:AddMessage("  Settings: " .. (T_OoM_Modules.Settings and "OK" or "MISSING"))
+end
+
 local T_OoM = CreateFrame("Frame")
 
 -- Initialize variables (Инициализация переменных)
@@ -81,6 +90,8 @@ end
 -- Load settings from Settings module
 local function LoadSettings()
     if T_OoM_Modules and T_OoM_Modules.Settings then
+        -- Initialize settings first
+        T_OoM_Modules.Settings:Initialize()
         settings = T_OoM_Modules.Settings:GetAll()
     else
         -- Fallback settings if module not loaded
@@ -232,3 +243,32 @@ T_OoM:SetScript("OnEvent", function()
 		-- print("Event 'PLAYER_ENTERING_WORLD' handled")
     end
 end)
+
+-- Slash commands for testing and configuration
+SLASH_TOOM1 = "/toom"
+SLASH_TOOM2 = "/t-oom"
+
+SlashCmdList["TOOM"] = function(msg)
+    local args = {}
+    for word in string.gmatch(msg, "%S+") do
+        table.insert(args, string.lower(word))
+    end
+    
+    local command = args[1] or ""
+      if command == "test" or command == "check" then
+        -- Use test module if available
+        if T_OoM_Modules and T_OoM_Modules.Test and T_OoM_Modules.Test.RunQuickTest then
+            T_OoM_Modules.Test:RunQuickTest()
+        else
+            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r Test module not available")
+        end
+    elseif command == "config" or command == "settings" then
+        DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6ECT-OoM:|r GUI interface will be added in Stage 4")
+    elseif command == "help" or command == "" then
+        DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6ECT-OoM Commands:|r")
+        DEFAULT_CHAT_FRAME:AddMessage("  |cFFFFFF00/toom test|r - Check Stage 1 readiness")
+        DEFAULT_CHAT_FRAME:AddMessage("  |cFFFFFF00/toom config|r - Open settings (coming in Stage 4)")
+        DEFAULT_CHAT_FRAME:AddMessage("  |cFFFFFF00/toom help|r - Show this help")
+    else
+        DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM:|r Unknown command. Use |cFFFFFF00/toom help|r")    end
+end
