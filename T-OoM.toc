@@ -9,6 +9,7 @@
 modules\loader.lua
 modules\settings.lua
 modules\localization.lua
+modules\mana_monitor.lua
 
 ## Localization files
 localization\enUS.lua

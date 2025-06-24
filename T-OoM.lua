@@ -305,10 +305,18 @@ SlashCmdList["TOOM"] = function(msg)
         DEFAULT_CHAT_FRAME:AddMessage((L and L("HELP_TITLE")) or "T-OoM Addon Commands:")
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_TEST")) or "/toom test - Run quick functionality test"))
         DEFAULT_CHAT_FRAME:AddMessage("  /toom testorder - Test settings keys order")
+        DEFAULT_CHAT_FRAME:AddMessage("  /toom testmana - Test mana monitor module (Stage 3.1)")
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_CONFIG")) or "/toom config - Open configuration window"))
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_EXPORT")) or "/toom export - Export current settings to chat"))
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_LANG")) or "/toom lang <en/ru> - Change language"))
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_HELP")) or "/toom help - Show this help message"))
+    elseif command == "testmana" or command == "manatest" then
+        -- Test mana monitor module (Stage 3.1)
+        if T_OoM_ManaMonitorTest then 
+            T_OoM_ManaMonitorTest()
+        else
+            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r Mana monitor test not available")
+        end
     else
         DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM:|r Unknown command. Use |cFFFFFF00/toom help|r")
     end
