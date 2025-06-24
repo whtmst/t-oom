@@ -26,9 +26,9 @@ RU: **T-OoM** - это простой аддон для объявления о�
 
 # T-OoM: Settings / Настройки
 
-EN: All settings are stored in the file `T-OoM.lua` in the section `-- SETTINGS (НАСТРОЙКИ)`. **I recommend making changes only when absolutely necessary, as they are configured for maximum convenience.**
+EN: All settings are stored **individually for each character** in SavedVariables. The addon now uses per-character settings, so each character can have their own configuration. Settings are managed through in-game commands (see `/toom help` for details).
 
-RU: Все настройки хранятся в файле `T-OoM.lua` в блоке `-- SETTINGS (НАСТРОЙКИ)`. **Советую менять только при очень сильной необходимости, так как они настроены максимально удобно.**
+RU: Все настройки теперь сохраняются **индивидуально для каждого персонажа** в SavedVariables. Аддон использует персонажные настройки, поэтому каждый персонаж может иметь собственную конфигурацию. Управление настройками осуществляется через внутриигровые команды (используйте `/toom help` для подробностей).
 
 ---
 

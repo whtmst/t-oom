@@ -6,6 +6,9 @@ Manages addon settings and SavedVariables integration
 
 -- Default settings (Настройки по умолчанию)
 local DEFAULT_SETTINGS = {
+    -- Localization settings (Настройки локализации)
+    language = "enUS",             -- Default language
+    
     -- Mana thresholds (Пороги маны)
     lowManaThreshold1 = 0.30,     -- 30% mana threshold
     lowManaThreshold2 = 0.15,     -- 15% mana threshold  
@@ -36,9 +39,6 @@ local DEFAULT_SETTINGS = {
         scenario = false   -- Scenarios (Сценарии)
     },
     
-    -- Localization settings (Настройки локализации)
-    language = "enUS",             -- Default language
-    
     -- GUI settings (Настройки интерфейса)
     minimapButton = {
         enabled = true,
@@ -49,18 +49,21 @@ local DEFAULT_SETTINGS = {
 
 -- Settings module
 local Settings = {}
-
--- Debug message to confirm settings.lua is executed
-DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6EC[T-OoM]|r settings.lua loaded successfully!")
+local isInitialized = false  -- Flag to prevent multiple initialization
 
 -- Initialize settings from SavedVariables or defaults
 function Settings:Initialize()
+    -- Prevent multiple initialization
+    if isInitialized then
+        return
+    end
+    
     -- Create SavedVariables if it doesn't exist
     if not T_OoM_Settings then
         T_OoM_Settings = {}
     end
     
-    -- Migrate settings from SavedVariables or use defaults
+    -- Initialize default values for missing settings
     for key, value in pairs(DEFAULT_SETTINGS) do
         if T_OoM_Settings[key] == nil then
             T_OoM_Settings[key] = self:DeepCopy(value)
@@ -69,6 +72,9 @@ function Settings:Initialize()
     
     -- Validate settings
     self:ValidateSettings()
+    
+    -- Mark as initialized
+    isInitialized = true
     
     DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6ECT-OoM:|r Settings loaded successfully")
 end

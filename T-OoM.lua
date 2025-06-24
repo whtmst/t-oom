@@ -87,11 +87,12 @@ local function HideCustomMessage()
     end
 end
 
--- Load settings from Settings module
+-- Load settings and localization from modules
 local function LoadSettings()
     if T_OoM_Modules and T_OoM_Modules.Settings then
         -- Initialize settings first
         T_OoM_Modules.Settings:Initialize()
+        
         settings = T_OoM_Modules.Settings:GetAll()
     else
         -- Fallback settings if module not loaded
@@ -99,9 +100,9 @@ local function LoadSettings()
             lowManaThreshold1 = 0.30,
             lowManaThreshold2 = 0.15,
             lowManaThreshold3 = 0.05,
-            lowManaMsg = "--- LOW ON MANA ---",
-            criticalLowManaMsg = "--- CRITICAL LOW MANA ---",
-            outOfManaMessage = "--- OUT OF MANA ---",
+            lowManaMsg = L and L("LOW_MANA") or "--- LOW ON MANA ---",
+            criticalLowManaMsg = L and L("CRITICAL_LOW_MANA") or "--- CRITICAL LOW MANA ---",
+            outOfManaMessage = L and L("OUT_OF_MANA") or "--- OUT OF MANA ---",
             chatChannel = "SAY",
             messageDuration = 3,
             fontSize = 96,
@@ -122,15 +123,17 @@ end
 
 -- On player login (При входе игрока)
 local function OnPlayerLogin()
-    LoadSettings()
+    -- Initialize localization system first
+    if T_OoM_Modules and T_OoM_Modules.Localization then
+        T_OoM_Modules.Localization:Initialize()
+    end
     
-    local title = GetAddOnMetadata("T-OoM", "Title")
-    local notes = GetAddOnMetadata("T-OoM", "Notes")
-    local loaded = title .. " - |cFF00FF00Successfully loaded!|r"
-    local message = notes
-
+    -- Then load settings (which depends on localization)
+    LoadSettings()
+      local title = GetAddOnMetadata("T-OoM", "Title")
+    local loaded = title .. " - |cFF00FF00" .. ((L and L("ADDON_LOADED")) or "Successfully loaded!") .. "|r"
+    
     DEFAULT_CHAT_FRAME:AddMessage(loaded)
-    DEFAULT_CHAT_FRAME:AddMessage(message)
 end
 
 -- World/Instance/Graveyard entering or leaves function (Функция входа/выхода игрока в мир, инстанс или на кладбище)
@@ -229,13 +232,19 @@ end)
 
 -- Register events (Регистрация событий)
 ---@diagnostic disable-next-line: param-type-mismatch
+T_OoM:RegisterEvent("ADDON_LOADED")
+---@diagnostic disable-next-line: param-type-mismatch
 T_OoM:RegisterEvent("PLAYER_LOGIN")
 ---@diagnostic disable-next-line: param-type-mismatch  
 T_OoM:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 -- Set event handlers (Установка обработчиков событий)
 T_OoM:SetScript("OnEvent", function()
-    if event == "PLAYER_LOGIN" then
+    if event == "ADDON_LOADED" and arg1 == "T-OoM" then
+        -- SavedVariables are now available but don't initialize here
+        -- Initialize will happen in PLAYER_LOGIN event
+        DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6EC[T-OoM]|r ADDON_LOADED: SavedVariables ready")
+    elseif event == "PLAYER_LOGIN" then
         OnPlayerLogin()
 		-- print("Event 'PLAYER_LOGIN' handled")
     elseif event == "PLAYER_ENTERING_WORLD" then
@@ -251,24 +260,47 @@ SLASH_TOOM2 = "/t-oom"
 SlashCmdList["TOOM"] = function(msg)
     local args = {}
     for word in string.gmatch(msg, "%S+") do
-        table.insert(args, string.lower(word))
+        table.insert(args, word) -- Don't lowercase - we'll handle case sensitivity per command
     end
     
-    local command = args[1] or ""
+    local command = string.lower(args[1] or "") -- Only lowercase the command, not arguments
       if command == "test" or command == "check" then
         -- Use test module if available
         if T_OoM_Modules and T_OoM_Modules.Test and T_OoM_Modules.Test.RunQuickTest then
             T_OoM_Modules.Test:RunQuickTest()
         else
-            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r Test module not available")
+            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r " .. ((L and L("TEST_ERROR")) or "Test module not available"))
+        end
+    elseif command == "testorder" or command == "order" then
+        -- Test settings order
+        if T_OoM_SettingsOrderTest then 
+            T_OoM_SettingsOrderTest()
+        else
+            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r Settings order test not available")
         end
     elseif command == "config" or command == "settings" then
-        DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6ECT-OoM:|r GUI interface will be added in Stage 4")
-    elseif command == "help" or command == "" then
-        DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6ECT-OoM Commands:|r")
-        DEFAULT_CHAT_FRAME:AddMessage("  |cFFFFFF00/toom test|r - Check Stage 1 readiness")
-        DEFAULT_CHAT_FRAME:AddMessage("  |cFFFFFF00/toom config|r - Open settings (coming in Stage 4)")
-        DEFAULT_CHAT_FRAME:AddMessage("  |cFFFFFF00/toom help|r - Show this help")
+        DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6ECT-OoM:|r " .. ((L and L("CONFIG_NOT_AVAILABLE")) or "Configuration interface not yet available."))    elseif command == "lang" or command == "language" then
+        local newLang = args[2] -- Don't lowercase the language code
+        if newLang and T_OoM_Modules and T_OoM_Modules.Localization then
+            if T_OoM_Modules.Localization:SetLanguage(newLang) then
+                -- Get actual current language after successful change
+                local currentLang = T_OoM_Modules.Localization:GetLanguage()
+                DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6ECT-OoM:|r " .. ((L and L("LANGUAGE_CHANGED")) or "Language changed to:") .. " " .. currentLang)
+                -- Reload settings to get localized messages
+                LoadSettings()
+            else
+                DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM:|r " .. ((L and L("LANGUAGE_NOT_FOUND")) or "Language pack not found:") .. " " .. newLang)
+            end
+        else
+            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM:|r Localization module not available")
+        end    elseif command == "help" or command == "" then
+        DEFAULT_CHAT_FRAME:AddMessage((L and L("HELP_TITLE")) or "T-OoM Addon Commands:")
+        DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_TEST")) or "/toom test - Run quick functionality test"))
+        DEFAULT_CHAT_FRAME:AddMessage("  /toom testorder - Test settings keys order")
+        DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_CONFIG")) or "/toom config - Open configuration window"))
+        DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_LANG")) or "/toom lang <en/ru> - Change language"))
+        DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_HELP")) or "/toom help - Show this help message"))
     else
-        DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM:|r Unknown command. Use |cFFFFFF00/toom help|r")    end
+        DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM:|r Unknown command. Use |cFFFFFF00/toom help|r")
+    end
 end
