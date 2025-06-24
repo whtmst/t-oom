@@ -17,6 +17,7 @@ L["OUT_OF_MANA"] = "--- OUT OF MANA ---"
 L["HELP_TITLE"] = "T-OoM Addon Commands:"
 L["HELP_TEST"] = "/toom test - Run quick functionality test"
 L["HELP_CONFIG"] = "/toom config - Open configuration window"
+L["HELP_EXPORT"] = "/toom export - Export current settings to chat"
 L["HELP_HELP"] = "/toom help - Show this help message"
 L["HELP_LANG"] = "/toom lang <en/ru> - Change language"
 
@@ -55,6 +56,9 @@ L["INSTANCE_RAID"] = "Raids"
 L["INSTANCE_ARENA"] = "Arenas"
 L["INSTANCE_PVP"] = "Battlegrounds"
 L["INSTANCE_SCENARIO"] = "Scenarios"
+
+-- Export messages (Сообщения экспорта)
+L["EXPORT_SUCCESS"] = "Settings exported. Copy from chat:"
 
 -- Export locale table
 T_OoM_Locale_enUS = L

@@ -17,6 +17,7 @@ L["OUT_OF_MANA"] = "--- ЗАКОНЧИЛАСЬ МАНА ---"
 L["HELP_TITLE"] = "Команды аддона T-OoM:"
 L["HELP_TEST"] = "/toom test - Запустить быстрый тест функций"
 L["HELP_CONFIG"] = "/toom config - Открыть окно настроек"
+L["HELP_EXPORT"] = "/toom export - Экспортировать текущие настройки в чат"
 L["HELP_HELP"] = "/toom help - Показать это сообщение помощи"
 L["HELP_LANG"] = "/toom lang <en/ru> - Изменить язык"
 

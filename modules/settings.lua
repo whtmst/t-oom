@@ -158,26 +158,87 @@ end
 
 -- Export settings to string (for sharing)
 function Settings:Export()
-    -- Simple serialization for basic types
-    local function serialize(t, indent)
+    -- Ordered keys for consistent export format
+    local orderedKeys = {
+        "language",
+        "lowManaThreshold1",
+        "lowManaThreshold2", 
+        "lowManaThreshold3",
+        "lowManaMsg",
+        "criticalLowManaMsg",
+        "outOfManaMessage",
+        "chatChannel",
+        "messageDuration",
+        "fontSize",
+        "frameColor",
+        "fontColor",
+        "fontPath",
+        "instanceTypeOptions",
+        "minimapButton"
+    }
+    
+    -- Simple serialization for basic types with ordered keys
+    local function serialize(t, indent, useOrderedKeys)
         indent = indent or 0
         local result = "{\n"
-        for k, v in pairs(t) do
-            result = result .. string.rep("  ", indent + 1) .. "[\"" .. k .. "\"] = "
-            if type(v) == "table" then
-                result = result .. serialize(v, indent + 1)
-            elseif type(v) == "string" then
-                result = result .. "\"" .. v .. "\""
-            else
-                result = result .. tostring(v)
+        
+        if useOrderedKeys and orderedKeys then
+            -- Process ordered keys first
+            for _, key in ipairs(orderedKeys) do
+                if t[key] ~= nil then
+                    result = result .. string.rep("  ", indent + 1) .. "[\"" .. key .. "\"] = "
+                    if type(t[key]) == "table" then
+                        result = result .. serialize(t[key], indent + 1, false)
+                    elseif type(t[key]) == "string" then
+                        result = result .. "\"" .. t[key] .. "\""
+                    else
+                        result = result .. tostring(t[key])
+                    end
+                    result = result .. ",\n"
+                end
             end
-            result = result .. ",\n"
+            
+            -- Process any remaining keys that weren't in orderedKeys
+            for k, v in pairs(t) do
+                local found = false
+                for _, orderedKey in ipairs(orderedKeys) do
+                    if k == orderedKey then
+                        found = true
+                        break
+                    end
+                end
+                if not found then
+                    result = result .. string.rep("  ", indent + 1) .. "[\"" .. k .. "\"] = "
+                    if type(v) == "table" then
+                        result = result .. serialize(v, indent + 1, false)
+                    elseif type(v) == "string" then
+                        result = result .. "\"" .. v .. "\""
+                    else
+                        result = result .. tostring(v)
+                    end
+                    result = result .. ",\n"
+                end
+            end
+        else
+            -- For nested tables, use pairs() as before
+            for k, v in pairs(t) do
+                result = result .. string.rep("  ", indent + 1) .. "[\"" .. k .. "\"] = "
+                if type(v) == "table" then
+                    result = result .. serialize(v, indent + 1, false)
+                elseif type(v) == "string" then
+                    result = result .. "\"" .. v .. "\""
+                else
+                    result = result .. tostring(v)
+                end
+                result = result .. ",\n"
+            end
         end
+        
         result = result .. string.rep("  ", indent) .. "}"
         return result
     end
     
-    return serialize(T_OoM_Settings)
+    return serialize(T_OoM_Settings, 0, true)
 end
 
 -- Import settings from string

@@ -255,7 +255,6 @@ end)
 
 -- Slash commands for testing and configuration
 SLASH_TOOM1 = "/toom"
-SLASH_TOOM2 = "/t-oom"
 
 SlashCmdList["TOOM"] = function(msg)
     local args = {}
@@ -271,15 +270,24 @@ SlashCmdList["TOOM"] = function(msg)
         else
             DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r " .. ((L and L("TEST_ERROR")) or "Test module not available"))
         end
-    elseif command == "testorder" or command == "order" then
-        -- Test settings order
+    elseif command == "testorder" or command == "order" then        -- Test settings order
         if T_OoM_SettingsOrderTest then 
             T_OoM_SettingsOrderTest()
         else
             DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r Settings order test not available")
         end
     elseif command == "config" or command == "settings" then
-        DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6ECT-OoM:|r " .. ((L and L("CONFIG_NOT_AVAILABLE")) or "Configuration interface not yet available."))    elseif command == "lang" or command == "language" then
+        DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6ECT-OoM:|r " .. ((L and L("CONFIG_NOT_AVAILABLE")) or "Configuration interface not yet available."))
+    elseif command == "export" then
+        -- Export settings to string
+        if T_OoM_Modules and T_OoM_Modules.Settings and T_OoM_Modules.Settings.Export then
+            local exportData = T_OoM_Modules.Settings:Export()
+            DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6ECT-OoM:|r " .. ((L and L("EXPORT_SUCCESS")) or "Settings exported. Copy from chat:"))
+            DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF00" .. exportData .. "|r")
+        else
+            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r Settings module not available")
+        end
+    elseif command == "lang" or command == "language" then
         local newLang = args[2] -- Don't lowercase the language code
         if newLang and T_OoM_Modules and T_OoM_Modules.Localization then
             if T_OoM_Modules.Localization:SetLanguage(newLang) then
@@ -298,6 +306,7 @@ SlashCmdList["TOOM"] = function(msg)
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_TEST")) or "/toom test - Run quick functionality test"))
         DEFAULT_CHAT_FRAME:AddMessage("  /toom testorder - Test settings keys order")
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_CONFIG")) or "/toom config - Open configuration window"))
+        DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_EXPORT")) or "/toom export - Export current settings to chat"))
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_LANG")) or "/toom lang <en/ru> - Change language"))
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_HELP")) or "/toom help - Show this help message"))
     else
