@@ -27,6 +27,9 @@ L["TEST_MODULE_SYSTEM"] = "Система модулей"
 L["TEST_SETTINGS"] = "Система настроек"
 L["TEST_SAVEDVARS"] = "SavedVariables"
 L["TEST_LOCALIZATION"] = "Система локализации"
+L["TEST_LOADER"] = "Загрузчик модулей"
+L["TEST_MANA_MONITOR"] = "Модуль мониторинга маны"
+L["TEST_UI_DISPLAY"] = "Модуль отображения UI"
 L["TEST_COMPLETE"] = "Быстрый тест T-OoM завершён!"
 L["TEST_OK"] = "ОК"
 L["TEST_ERROR"] = "ОШИБКА"
@@ -56,6 +59,41 @@ L["INSTANCE_RAID"] = "Рейды"
 L["INSTANCE_ARENA"] = "Арены"
 L["INSTANCE_PVP"] = "Поля боя"
 L["INSTANCE_SCENARIO"] = "Сценарии"
+
+-- Export messages (Сообщения экспорта)
+L["EXPORT_SUCCESS"] = "Настройки экспортированы. Скопируйте из чата:"
+
+-- Error messages (Сообщения об ошибках)
+L["TEST_ERROR"] = "Модуль тестирования недоступен"
+L["SETTINGS_ORDER_TEST_ERROR"] = "Тест порядка настроек недоступен"
+L["UI_DISPLAY_TEST_ERROR"] = "Тест UI Display недоступен"
+L["UI_DISPLAY_MANA_TEST_ERROR"] = "Тест UI с событиями маны недоступен"
+L["MANA_MONITOR_TEST_ERROR"] = "Тест мониторинга маны недоступен"
+L["SETTINGS_MODULE_ERROR"] = "Модуль настроек недоступен"
+L["LOCALIZATION_MODULE_ERROR"] = "Модуль локализации недоступен"
+
+-- Debug messages (Отладочные сообщения)
+L["MAIN_FILE_LOADED"] = "Основной файл загружен. Статус модулей:"
+L["MODULES_STATUS"] = "T_OoM_Modules:"
+L["LOADER_STATUS"] = "Загрузчик:"
+L["SETTINGS_STATUS"] = "Настройки:"
+L["MODULE_OK"] = "ОК"
+L["MODULE_MISSING"] = "ОТСУТСТВУЕТ"
+L["ADDON_LOADED_EVENT"] = "ADDON_LOADED: SavedVariables готовы"
+L["FALLBACK_SUCCESS"] = "Успешно загружено!"
+L["UNKNOWN_COMMAND"] = "Неизвестная команда. Используйте"
+
+-- Status command messages (Сообщения команды статуса)
+L["STATUS_TITLE"] = "Статус глобальных функций T-OoM:"
+L["STATUS_AVAILABLE"] = "Доступно"
+L["STATUS_MISSING"] = "Отсутствует"
+L["HELP_STATUS"] = "/toom status - Проверить статус глобальных функций тестов"
+
+-- Help command messages (Сообщения команд справки)
+L["HELP_TESTORDER"] = "/toom testorder - Тест порядка настроек"
+L["HELP_TESTMANA"] = "/toom testmana - Тест модуля мониторинга маны (Этап 3.1)"
+L["HELP_TESTUI"] = "/toom testui - Тест модуля отображения UI (Этап 3.2)"
+L["HELP_TESTUI_MANA"] = "/toom testui_mana - Тест UI с событиями маны (Этап 3.2)"
 
 -- Export locale table
 T_OoM_Locale_ruRU = L

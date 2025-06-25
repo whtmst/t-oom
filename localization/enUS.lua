@@ -27,6 +27,9 @@ L["TEST_MODULE_SYSTEM"] = "Module System"
 L["TEST_SETTINGS"] = "Settings System"
 L["TEST_SAVEDVARS"] = "SavedVariables"
 L["TEST_LOCALIZATION"] = "Localization System"
+L["TEST_LOADER"] = "Module Loader"
+L["TEST_MANA_MONITOR"] = "Mana Monitor Module"
+L["TEST_UI_DISPLAY"] = "UI Display Module"
 L["TEST_COMPLETE"] = "T-OoM Quick Test Complete!"
 L["TEST_OK"] = "OK"
 L["TEST_ERROR"] = "ERROR"
@@ -59,6 +62,38 @@ L["INSTANCE_SCENARIO"] = "Scenarios"
 
 -- Export messages (Сообщения экспорта)
 L["EXPORT_SUCCESS"] = "Settings exported. Copy from chat:"
+
+-- Error messages (Сообщения об ошибках)
+L["TEST_ERROR"] = "Test module not available"
+L["SETTINGS_ORDER_TEST_ERROR"] = "Settings order test not available"
+L["UI_DISPLAY_TEST_ERROR"] = "UI Display test not available"
+L["UI_DISPLAY_MANA_TEST_ERROR"] = "UI Display mana events test not available"
+L["MANA_MONITOR_TEST_ERROR"] = "Mana monitor test not available"
+L["SETTINGS_MODULE_ERROR"] = "Settings module not available"
+L["LOCALIZATION_MODULE_ERROR"] = "Localization module not available"
+
+-- Debug messages (Отладочные сообщения)
+L["MAIN_FILE_LOADED"] = "Main file loaded. Modules status:"
+L["MODULES_STATUS"] = "T_OoM_Modules:"
+L["LOADER_STATUS"] = "Loader:"
+L["SETTINGS_STATUS"] = "Settings:"
+L["MODULE_OK"] = "OK"
+L["MODULE_MISSING"] = "MISSING"
+L["ADDON_LOADED_EVENT"] = "ADDON_LOADED: SavedVariables ready"
+L["FALLBACK_SUCCESS"] = "Successfully loaded!"
+L["UNKNOWN_COMMAND"] = "Unknown command. Use"
+
+-- Status command messages (Сообщения команды статуса)
+L["STATUS_TITLE"] = "T-OoM Global Functions Status:"
+L["STATUS_AVAILABLE"] = "Available"
+L["STATUS_MISSING"] = "Missing"
+L["HELP_STATUS"] = "/toom status - Check global test functions status"
+
+-- Help command messages (Сообщения команд справки)
+L["HELP_TESTORDER"] = "/toom testorder - Test settings keys order"
+L["HELP_TESTMANA"] = "/toom testmana - Test mana monitor module (Stage 3.1)"
+L["HELP_TESTUI"] = "/toom testui - Test UI display module (Stage 3.2)"
+L["HELP_TESTUI_MANA"] = "/toom testui_mana - Test UI display with mana events (Stage 3.2)"
 
 -- Export locale table
 T_OoM_Locale_enUS = L
