@@ -71,6 +71,7 @@ L["UI_DISPLAY_MANA_TEST_ERROR"] = "UI Display mana events test not available"
 L["MANA_MONITOR_TEST_ERROR"] = "Mana monitor test not available"
 L["SETTINGS_MODULE_ERROR"] = "Settings module not available"
 L["LOCALIZATION_MODULE_ERROR"] = "Localization module not available"
+L["GUI_FRAMEWORK_TEST_ERROR"] = "GUI Framework test not available"
 
 -- Debug messages (Отладочные сообщения)
 L["MAIN_FILE_LOADED"] = "Main file loaded. Modules status:"
@@ -94,6 +95,7 @@ L["HELP_TESTORDER"] = "/toom testorder - Test settings keys order"
 L["HELP_TESTMANA"] = "/toom testmana - Test mana monitor module (Stage 3.1)"
 L["HELP_TESTUI"] = "/toom testui - Test UI display module (Stage 3.2)"
 L["HELP_TESTUI_MANA"] = "/toom testui_mana - Test UI display with mana events (Stage 3.2)"
+L["HELP_TESTGUI"] = "/toom testgui - Test GUI framework module (Stage 4.1)"
 
 -- Export locale table
 T_OoM_Locale_enUS = L

@@ -106,6 +106,7 @@ SlashCmdList["TOOM"] = function(msg)
         DEFAULT_CHAT_FRAME:AddMessage("  T_OoM_ManaMonitorTest: " .. (T_OoM_ManaMonitorTest and ("|cFF00FF00" .. ((L and L("STATUS_AVAILABLE")) or "Available") .. "|r") or ("|cFFFF0000" .. ((L and L("STATUS_MISSING")) or "Missing") .. "|r")))
         DEFAULT_CHAT_FRAME:AddMessage("  T_OoM_UIDisplayTest: " .. (T_OoM_UIDisplayTest and ("|cFF00FF00" .. ((L and L("STATUS_AVAILABLE")) or "Available") .. "|r") or ("|cFFFF0000" .. ((L and L("STATUS_MISSING")) or "Missing") .. "|r")))
         DEFAULT_CHAT_FRAME:AddMessage("  T_OoM_UIDisplayManaEventsTest: " .. (T_OoM_UIDisplayManaEventsTest and ("|cFF00FF00" .. ((L and L("STATUS_AVAILABLE")) or "Available") .. "|r") or ("|cFFFF0000" .. ((L and L("STATUS_MISSING")) or "Missing") .. "|r")))
+        DEFAULT_CHAT_FRAME:AddMessage("  T_OoM_GUIFrameworkTest: " .. (T_OoM_GUIFrameworkTest and ("|cFF00FF00" .. ((L and L("STATUS_AVAILABLE")) or "Available") .. "|r") or ("|cFFFF0000" .. ((L and L("STATUS_MISSING")) or "Missing") .. "|r")))
     elseif command == "testorder" then
         -- Settings order test
         if T_OoM_SettingsOrderTest then 
@@ -133,6 +134,13 @@ SlashCmdList["TOOM"] = function(msg)
             T_OoM_UIDisplayManaEventsTest()
         else
             DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r " .. ((L and L("UI_DISPLAY_MANA_TEST_ERROR")) or "UI Display mana events test not available"))
+        end
+    elseif command == "testgui" then
+        -- GUI Framework test
+        if T_OoM_GUIFrameworkTest then 
+            T_OoM_GUIFrameworkTest()
+        else
+            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r " .. ((L and L("GUI_FRAMEWORK_TEST_ERROR")) or "GUI Framework test not available"))
         end
     elseif command == "config" then
         DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6ECT-OoM:|r " .. ((L and L("CONFIG_NOT_AVAILABLE")) or "Configuration interface not yet available."))
@@ -167,6 +175,7 @@ SlashCmdList["TOOM"] = function(msg)
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_TESTMANA")) or "/toom testmana - Test mana monitor module (Stage 3.1)"))
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_TESTUI")) or "/toom testui - Test UI display module (Stage 3.2)"))
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_TESTUI_MANA")) or "/toom testui_mana - Test UI display with mana events (Stage 3.2)"))
+        DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_TESTGUI")) or "/toom testgui - Test GUI framework module (Stage 4.1)"))
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_CONFIG")) or "/toom config - Open configuration window"))
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_EXPORT")) or "/toom export - Export current settings to chat"))
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_LANG")) or "/toom lang <en/ru> - Change language"))

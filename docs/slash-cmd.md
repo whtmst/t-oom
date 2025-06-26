@@ -15,6 +15,7 @@
 | `testmana` | Тест модуля мониторинга маны (Этап 3.1) | `/toom testmana` |
 | `testui` | Тест модуля отображения UI (Этап 3.2) | `/toom testui` |
 | `testui_mana` | Тест UI с событиями маны (Этап 3.2) | `/toom testui_mana` |
+| `testgui` | Тест модуля GUI фреймворка (Этап 4.1) | `/toom testgui` |
 | `config` | Окно настроек (🚧 в разработке) | `/toom config` |
 | `export` | Экспорт настроек в чат | `/toom export` |
 | `lang <код>` | Смена языка (`en`/`ru`) | `/toom lang ru` |
@@ -29,6 +30,7 @@
 - `/toom testmana` - Test mana monitor module (Stage 3.1)
 - `/toom testui` - Test UI display module (Stage 3.2)
 - `/toom testui_mana` - Test UI display with mana events (Stage 3.2)
+- `/toom testgui` - Test GUI framework module (Stage 4.1)
 - `/toom config` - Open configuration window
 - `/toom export` - Export current settings to chat  
 - `/toom lang <en/ru>` - Change language
@@ -41,6 +43,7 @@
 - `/toom testmana` - Тест модуля мониторинга маны (Этап 3.1)
 - `/toom testui` - Тест модуля отображения UI (Этап 3.2)
 - `/toom testui_mana` - Тест UI с событиями маны (Этап 3.2)
+- `/toom testgui` - Тест модуля GUI фреймворка (Этап 4.1)
 - `/toom config` - Открыть окно настроек
 - `/toom export` - Экспортировать настройки в чат
 - `/toom lang <en/ru>` - Изменить язык
