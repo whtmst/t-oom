@@ -18,12 +18,6 @@ local minimapButton = nil
 local isInitialized = false
 local isDragging = false
 
--- Default position settings
-local DEFAULT_POSITION = {
-    angle = 0,  -- 0 degrees (top of minimap)
-    radius = 78  -- Distance from minimap center
-}
-
 -- Get localization function (fallback if not available)
 local L = function(key) 
     if T_OoM_Modules and T_OoM_Modules.Localization and T_OoM_Modules.Localization.GetString then
@@ -59,11 +53,27 @@ end
 local function GetButtonPosition()
     local settings = GetSettings()
     if settings then
-        local angle = settings:Get("minimapButtonAngle") or DEFAULT_POSITION.angle
-        local radius = settings:Get("minimapButtonRadius") or DEFAULT_POSITION.radius
+        local angle = settings:Get("minimapButtonAngle")
+        local radius = settings:Get("minimapButtonRadius")
+        
+        -- Use settings defaults if no saved position
+        if not angle or not radius then
+            local defaultMinimapButton = settings:Get("minimapButton")
+            if defaultMinimapButton then
+                angle = angle or defaultMinimapButton.angle
+                radius = radius or defaultMinimapButton.radius
+            else
+                -- Final fallback
+                angle = angle or 0
+                radius = radius or 80
+            end
+        end
+        
         return angle, radius
     end
-    return DEFAULT_POSITION.angle, DEFAULT_POSITION.radius
+    
+    -- Fallback if no settings module
+    return 0, 80
 end
 
 -- Save button position to settings
@@ -91,16 +101,43 @@ end
 local function OnDragStart()
     if IsShiftKeyDown() and minimapButton then
         isDragging = true
-        -- Use SetPoint repositioning instead of StartMoving for better control
+        -- Don't use StartMoving - we'll handle positioning manually
         DEFAULT_CHAT_FRAME:AddMessage(DEBUG_PREFIX .. " Dragging started (Shift+Drag)")
     else
         DEFAULT_CHAT_FRAME:AddMessage(DEBUG_PREFIX .. " Hold Shift to drag button")
     end
 end
 
+-- Update button position during drag (called by OnUpdate)
+local function UpdateDragPosition()
+    if not isDragging or not minimapButton then return end
+    
+    local scale = UIParent:GetEffectiveScale()
+    local cursorX, cursorY = GetCursorPosition()
+    cursorX = cursorX / scale
+    cursorY = cursorY / scale
+    
+    local minimapX, minimapY = Minimap:GetCenter()
+    
+    if minimapX and minimapY then
+        local deltaX = cursorX - minimapX
+        local deltaY = cursorY - minimapY
+        local angle = math.atan2(deltaY, deltaX)
+        
+        -- Constrain to fixed radius (80 pixels from center)
+        local constrainedRadius = 80
+        local x = constrainedRadius * math.cos(angle)
+        local y = constrainedRadius * math.sin(angle)
+        
+        -- Update button position in real-time
+        minimapButton:ClearAllPoints()
+        minimapButton:SetPoint("CENTER", Minimap, "CENTER", x, y)
+    end
+end
+
 local function OnDragStop()
     if isDragging and minimapButton then
-        -- Calculate new angle based on cursor position relative to minimap center
+        -- Calculate final angle based on cursor position
         local scale = UIParent:GetEffectiveScale()
         local cursorX, cursorY = GetCursorPosition()
         cursorX = cursorX / scale
@@ -112,10 +149,7 @@ local function OnDragStop()
             local deltaX = cursorX - minimapX
             local deltaY = cursorY - minimapY
             local newAngle = math.atan2(deltaY, deltaX)
-            local newRadius = math.sqrt(deltaX * deltaX + deltaY * deltaY)
-            
-            -- Clamp radius to reasonable bounds
-            newRadius = math.max(60, math.min(100, newRadius))
+            local newRadius = 80  -- Fixed radius
             
             -- Save new position
             SaveButtonPosition(newAngle, newRadius)
@@ -187,7 +221,7 @@ function MinimapButton:CreateButton()
     minimapButton.overlay:SetTexture("Interface\\Minimap\\MiniMap-TrackingBorder")
     minimapButton.overlay:SetPoint("TOPLEFT", 0, 0)
     
-    -- Create icon layer
+    -- Create icon layer (should be under border to be clipped)
     minimapButton.icon = minimapButton:CreateTexture(nil, "BACKGROUND")
     minimapButton.icon:SetWidth(16)
     minimapButton.icon:SetHeight(16)
@@ -201,6 +235,7 @@ function MinimapButton:CreateButton()
     minimapButton:SetScript("OnClick", OnClick)
     minimapButton:SetScript("OnEnter", OnEnter)
     minimapButton:SetScript("OnLeave", OnLeave)
+    minimapButton:SetScript("OnUpdate", UpdateDragPosition)
     
     -- Position button
     minimapButton:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 0, 0)
@@ -244,7 +279,17 @@ end
 
 -- Reset button position to default
 function MinimapButton:ResetPosition()
-    SaveButtonPosition(DEFAULT_POSITION.angle, DEFAULT_POSITION.radius)
+    local settings = GetSettings()
+    if settings then
+        local defaultMinimapButton = settings:Get("minimapButton")
+        if defaultMinimapButton then
+            SaveButtonPosition(defaultMinimapButton.angle, defaultMinimapButton.radius)
+        else
+            SaveButtonPosition(0, 80) -- Fallback default
+        end
+    else
+        SaveButtonPosition(0, 80) -- Fallback default
+    end
     UpdateButtonPosition()
     DEFAULT_CHAT_FRAME:AddMessage(DEBUG_PREFIX .. " Position reset to default")
 end

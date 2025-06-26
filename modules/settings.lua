@@ -43,7 +43,7 @@ local DEFAULT_SETTINGS = {
     minimapButton = {
         enabled = true,
         angle = 0,                 -- Angle around minimap in radians
-        radius = 80               -- Distance from minimap center
+        radius = 80                -- Distance from minimap center (matches minimap_button.lua)
     }
 }
 
