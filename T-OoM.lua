@@ -47,7 +47,17 @@ local function InitializeModules()
             T_OoM_Modules.UIDisplay:Initialize()
         end
         
-        -- 5. Initialize test module if available
+        -- 5. Initialize GUI Framework (needed for ConfigGUI)
+        if T_OoM_Modules.GUIFramework then
+            T_OoM_Modules.GUIFramework:Initialize()
+        end
+        
+        -- 6. Initialize Configuration GUI
+        if T_OoM_Modules.ConfigGUI then
+            T_OoM_Modules.ConfigGUI:Initialize()
+        end
+        
+        -- 7. Initialize test module if available
         if T_OoM_Modules.Test then
             T_OoM_Modules.Test:Initialize()
         end
@@ -143,7 +153,12 @@ SlashCmdList["TOOM"] = function(msg)
             DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r " .. ((L and L("GUI_FRAMEWORK_TEST_ERROR")) or "GUI Framework test not available"))
         end
     elseif command == "config" then
-        DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6ECT-OoM:|r " .. ((L and L("CONFIG_NOT_AVAILABLE")) or "Configuration interface not yet available."))
+        -- Open configuration window
+        if T_OoM_Modules and T_OoM_Modules.ConfigGUI then
+            T_OoM_Modules.ConfigGUI:ToggleWindow()
+        else
+            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r " .. ((L and L("CONFIG_GUI_ERROR")) or "Configuration GUI not available"))
+        end
     elseif command == "export" then
         -- Export settings
         if T_OoM_Modules and T_OoM_Modules.Settings and T_OoM_Modules.Settings.Export then

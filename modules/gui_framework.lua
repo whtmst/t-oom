@@ -380,9 +380,12 @@ function GUIFramework:CreateCheckBox(text, parent, onClick)
     checkText:SetText(text)
     checkText:SetTextColor(COLORS.TEXT_WHITE[1], COLORS.TEXT_WHITE[2], COLORS.TEXT_WHITE[3], COLORS.TEXT_WHITE[4])
     
-    -- Click handler
+    -- Click handler with proper state passing
     if onClick and type(onClick) == "function" then
-        checkBox:SetScript("OnClick", onClick)
+        checkBox:SetScript("OnClick", function()
+            local checked = checkBox:GetChecked() == 1
+            onClick(checked)
+        end)
     end
     
     -- Store references

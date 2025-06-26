@@ -72,6 +72,7 @@ L["MANA_MONITOR_TEST_ERROR"] = "Mana monitor test not available"
 L["SETTINGS_MODULE_ERROR"] = "Settings module not available"
 L["LOCALIZATION_MODULE_ERROR"] = "Localization module not available"
 L["GUI_FRAMEWORK_TEST_ERROR"] = "GUI Framework test not available"
+L["CONFIG_GUI_ERROR"] = "Configuration GUI not available"
 
 -- Debug messages (Отладочные сообщения)
 L["MAIN_FILE_LOADED"] = "Main file loaded. Modules status:"

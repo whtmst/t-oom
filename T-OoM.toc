@@ -12,6 +12,7 @@ modules\localization.lua
 modules\mana_monitor.lua
 modules\ui_display.lua
 modules\gui_framework.lua
+modules\config_gui.lua
 
 ## Localization files
 localization\enUS.lua
