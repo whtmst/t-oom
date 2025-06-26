@@ -98,6 +98,11 @@ L["HELP_TESTUI"] = "/toom testui - Тест модуля отображения 
 L["HELP_TESTUI_MANA"] = "/toom testui_mana - Тест UI с событиями маны (Этап 3.2)"
 L["HELP_TESTGUI"] = "/toom testgui - Тест модуля GUI фреймворка (Этап 4.1)"
 
+-- Minimap button tooltips
+L["MINIMAP_TOOLTIP_DESC"] = "Аннонсер нехватки маны"
+L["MINIMAP_TOOLTIP_CLICK"] = "Клик: Открыть настройки"
+L["MINIMAP_TOOLTIP_DRAG"] = "Shift+Перетаскивание: Переместить кнопку"
+
 -- Export locale table
 T_OoM_Locale_ruRU = L
 DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6EC[T-OoM]|r T_OoM_Locale_ruRU exported successfully!")

@@ -57,7 +57,12 @@ local function InitializeModules()
             T_OoM_Modules.ConfigGUI:Initialize()
         end
         
-        -- 7. Initialize test module if available
+        -- 7. Initialize Minimap Button
+        if T_OoM_Modules.MinimapButton then
+            T_OoM_Modules.MinimapButton:Initialize()
+        end
+        
+        -- 8. Initialize test module if available
         if T_OoM_Modules.Test then
             T_OoM_Modules.Test:Initialize()
         end

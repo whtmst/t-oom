@@ -13,6 +13,7 @@ modules\mana_monitor.lua
 modules\ui_display.lua
 modules\gui_framework.lua
 modules\config_gui.lua
+modules\minimap_button.lua
 
 ## Localization files
 localization\enUS.lua

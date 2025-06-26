@@ -98,6 +98,11 @@ L["HELP_TESTUI"] = "/toom testui - Test UI display module (Stage 3.2)"
 L["HELP_TESTUI_MANA"] = "/toom testui_mana - Test UI display with mana events (Stage 3.2)"
 L["HELP_TESTGUI"] = "/toom testgui - Test GUI framework module (Stage 4.1)"
 
+-- Minimap button tooltips
+L["MINIMAP_TOOLTIP_DESC"] = "Out of Mana announcer addon"
+L["MINIMAP_TOOLTIP_CLICK"] = "Click: Open configuration"
+L["MINIMAP_TOOLTIP_DRAG"] = "Shift+Drag: Move button"
+
 -- Export locale table
 T_OoM_Locale_enUS = L
 DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6EC[T-OoM]|r T_OoM_Locale_enUS exported successfully!")
