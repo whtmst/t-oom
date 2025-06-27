@@ -101,8 +101,20 @@ SLASH_TOOM1 = "/toom"
 
 SlashCmdList["TOOM"] = function(msg)
     local args = {}
-    for word in string.gmatch(msg, "%S+") do
-        table.insert(args, word)
+    if string.match then
+        local pattern = "%S+"
+        while true do
+            local word = string.match(msg, pattern)
+            if not word then break end
+            table.insert(args, word)
+            local startIdx, endIdx = string.find(msg, word, 1, true)
+            if not endIdx then break end
+            msg = string.sub(msg, endIdx + 1)
+        end
+    elseif string.gfind then
+        for word in string.gfind(msg, "%S+") do
+            table.insert(args, word)
+        end
     end
     
     local command = string.lower(args[1] or "")

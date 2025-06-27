@@ -1,7 +1,7 @@
 --[[
 T-OoM Configuration GUI
 Main configuration window for T-OoM addon settings
-Главное окно настроек аддона T-OoM
+Главное окно настроек аддона T-OоM
 
 WoW 1.12.1 Compatible Configuration Interface
 --]]
@@ -135,28 +135,51 @@ function ConfigGUI:CreateMessageSection(parent, gui)
     -- Section title
     local messageTitle = gui:CreateLabel("Message Settings", parent, "GameFontNormalLarge")
     messageTitle:SetPoint("TOPLEFT", components.langLabel, "BOTTOMLEFT", 0, -25)
-    
+
     -- Low Mana Message
-    local lowManaLabel = gui:CreateLabel("Low Mana Message:", parent)
+    local lowManaLabel = gui:CreateLabel("Low Mana Message (max 120 symbols):", parent)
     lowManaLabel:SetPoint("TOPLEFT", messageTitle, "BOTTOMLEFT", 0, -15)
-    
-    local lowManaEditBox = gui:CreateEditBox(300, 24, parent, "Enter low mana message...")
+    local lowManaEditBox = gui:CreateEditBox(300, 24, parent, "Enter low mana message (max 120 symbols)...")
     lowManaEditBox:SetPoint("TOPLEFT", lowManaLabel, "BOTTOMLEFT", 0, -5)
-    
+
     -- Critical Low Mana Message
-    local criticalLabel = gui:CreateLabel("Critical Low Mana Message:", parent)
+    local criticalLabel = gui:CreateLabel("Critical Low Mana Message (max 120 symbols):", parent)
     criticalLabel:SetPoint("TOPLEFT", lowManaEditBox, "BOTTOMLEFT", 0, -10)
-    
-    local criticalEditBox = gui:CreateEditBox(300, 24, parent, "Enter critical mana message...")
+    local criticalEditBox = gui:CreateEditBox(300, 24, parent, "Enter critical mana message (max 120 symbols)...")
     criticalEditBox:SetPoint("TOPLEFT", criticalLabel, "BOTTOMLEFT", 0, -5)
-    
+
     -- Out of Mana Message
-    local outOfManaLabel = gui:CreateLabel("Out of Mana Message:", parent)
+    local outOfManaLabel = gui:CreateLabel("Out of Mana Message (max 120 symbols):", parent)
     outOfManaLabel:SetPoint("TOPLEFT", criticalEditBox, "BOTTOMLEFT", 0, -10)
-    
-    local outOfManaEditBox = gui:CreateEditBox(300, 24, parent, "Enter out of mana message...")
+    local outOfManaEditBox = gui:CreateEditBox(300, 24, parent, "Enter out of mana message (max 120 symbols)...")
     outOfManaEditBox:SetPoint("TOPLEFT", outOfManaLabel, "BOTTOMLEFT", 0, -5)
-    
+
+    -- Валидация и обработка ввода
+    local function validateAndSet(editBox, key, minLen, maxLen)
+        local innerEditBox = editBox.editBox
+        innerEditBox:SetScript("OnTextChanged", function()
+            local text = innerEditBox:GetText()
+            -- Truncate if over maxLen (no SetCursorPosition in 1.12.1)
+            if string.len(text) > maxLen then
+                text = string.sub(text, 1, maxLen)
+                innerEditBox:SetText(text)
+                DEFAULT_CHAT_FRAME:AddMessage("|cFFFFA500[T-OoM]|r Message truncated to "..maxLen.." symbols!")
+            end
+            if string.len(text) < minLen then
+                innerEditBox:SetTextColor(1, 0.2, 0.2, 1)
+            else
+                innerEditBox:SetTextColor(0.9, 0.9, 0.9, 1)
+                local settings = GetSettings()
+                if settings then
+                    settings:Set(key, text)
+                end
+            end
+        end)
+    end
+    validateAndSet(lowManaEditBox, "lowManaMsg", 1, 120)
+    validateAndSet(criticalEditBox, "criticalLowManaMsg", 1, 120)
+    validateAndSet(outOfManaEditBox, "outOfManaMessage", 1, 120)
+
     -- Store references
     components.messageTitle = messageTitle
     components.lowManaLabel = lowManaLabel
@@ -260,12 +283,39 @@ end
 function ConfigGUI:ApplySettings()
     local settings = GetSettings()
     if not settings then return end
-    
-    -- Get values from GUI components and save them
-    -- For now, just show a message
+    local function getTextSafe(editBox)
+        if editBox and editBox.editBox then
+            local text = editBox.editBox:GetText()
+            if text and text ~= editBox.editBox.placeholder then
+                return text
+            end
+        end
+        return ""
+    end
+    local low = getTextSafe(components.lowManaEditBox)
+    local crit = getTextSafe(components.criticalEditBox)
+    local out = getTextSafe(components.outOfManaEditBox)
+    -- Hard truncate before saving
+    if string.len(low) > 120 then
+        low = string.sub(low, 1, 120)
+        DEFAULT_CHAT_FRAME:AddMessage("|cFFFFA500[T-OoM]|r Low Mana Message truncated to 120 symbols!")
+    end
+    if string.len(crit) > 120 then
+        crit = string.sub(crit, 1, 120)
+        DEFAULT_CHAT_FRAME:AddMessage("|cFFFFA500[T-OoM]|r Critical Low Mana Message truncated to 120 symbols!")
+    end
+    if string.len(out) > 120 then
+        out = string.sub(out, 1, 120)
+        DEFAULT_CHAT_FRAME:AddMessage("|cFFFFA500[T-OoM]|r Out of Mana Message truncated to 120 symbols!")
+    end
+    if string.len(low) < 1 or string.len(crit) < 1 or string.len(out) < 1 then
+        DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000[T-OoM]|r Message length must be 1-120 characters!")
+        return
+    end
+    settings:Set("lowManaMsg", low)
+    settings:Set("criticalLowManaMsg", crit)
+    settings:Set("outOfManaMessage", out)
     DEFAULT_CHAT_FRAME:AddMessage(DEBUG_PREFIX .. " Settings applied and saved!")
-    
-    -- Close window after applying
     self:CloseWindow()
 end
 
@@ -294,9 +344,16 @@ end
 function ConfigGUI:LoadSettingsIntoGUI()
     local settings = GetSettings()
     if not settings then return end
-    
-    -- Load settings into GUI components
-    -- This will be implemented when we have actual settings integration
+    -- Загрузка значений в поля ввода
+    if components.lowManaEditBox and components.lowManaEditBox.editBox then
+        components.lowManaEditBox.editBox:SetText(settings:Get("lowManaMsg") or "")
+    end
+    if components.criticalEditBox and components.criticalEditBox.editBox then
+        components.criticalEditBox.editBox:SetText(settings:Get("criticalLowManaMsg") or "")
+    end
+    if components.outOfManaEditBox and components.outOfManaEditBox.editBox then
+        components.outOfManaEditBox.editBox:SetText(settings:Get("outOfManaMessage") or "")
+    end
     DEFAULT_CHAT_FRAME:AddMessage(DEBUG_PREFIX .. " Settings loaded into GUI")
 end
 
