@@ -223,11 +223,11 @@ function MinimapButton:CreateButton()
     
     -- Create icon layer (should be under border to be clipped)
     minimapButton.icon = minimapButton:CreateTexture(nil, "BACKGROUND")
-    minimapButton.icon:SetWidth(16)
-    minimapButton.icon:SetHeight(16)
+    minimapButton.icon:SetWidth(18)
+    minimapButton.icon:SetHeight(18)
     minimapButton.icon:SetTexture("Interface\\AddOns\\T-OoM\\textures\\miniMapIcon")
     minimapButton.icon:SetTexCoord(0.05, 0.95, 0.05, 0.95)
-    minimapButton.icon:SetPoint("CENTER", 1, 1)
+    minimapButton.icon:SetPoint("CENTER", 0, 0)
     
     -- Set event handlers
     minimapButton:SetScript("OnDragStart", OnDragStart)
