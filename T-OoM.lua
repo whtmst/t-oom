@@ -57,12 +57,7 @@ local function InitializeModules()
             T_OoM_Modules.ConfigGUI:Initialize()
         end
         
-        -- 7. Initialize Minimap Button
-        if T_OoM_Modules.MinimapButton then
-            T_OoM_Modules.MinimapButton:Initialize()
-        end
-        
-        -- 8. Initialize test module if available
+        -- 7. Initialize test module if available
         if T_OoM_Modules.Test then
             T_OoM_Modules.Test:Initialize()
         end
@@ -71,26 +66,25 @@ end
 
 -- On player login event handler
 local function OnPlayerLogin()
-    InitializeModules()
-    
     -- Show success message using localization
     local title = GetAddOnMetadata("T-OoM", "Title")
     local loaded = title .. " - |cFF00FF00" .. ((L and L("ADDON_LOADED")) or (L and L("FALLBACK_SUCCESS")) or "Successfully loaded!") .. "|r"
-    
     DEFAULT_CHAT_FRAME:AddMessage(loaded)
 end
 
--- Register events
----@diagnostic disable-next-line: param-type-mismatch
 T_OoM:RegisterEvent("ADDON_LOADED")
----@diagnostic disable-next-line: param-type-mismatch
 T_OoM:RegisterEvent("PLAYER_LOGIN")
 
--- Event handler
 T_OoM:SetScript("OnEvent", function()
     if event == "ADDON_LOADED" and arg1 == "T-OoM" then
-        -- SavedVariables are available
-        DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6EC[T-OoM]|r " .. ((L and L("ADDON_LOADED_EVENT")) or "ADDON_LOADED: SavedVariables ready"))
+        if T_OoM_Modules then
+            InitializeModules()
+            -- MinimapButton is always re-initialized after SavedVariables and localization are loaded
+            if T_OoM_Modules.MinimapButton then
+                T_OoM_Modules.MinimapButton:Cleanup()
+                T_OoM_Modules.MinimapButton:Initialize()
+            end
+        end
     elseif event == "PLAYER_LOGIN" then
         OnPlayerLogin()
     end
