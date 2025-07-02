@@ -5,6 +5,10 @@
 ## Notes: |cFF11A6ECT-OoM|r is a simple Out of Mana announcer addon for |cff00ff00Turtle WoW|r. Made with love by Wht Mst.
 ## SavedVariablesPerCharacter: T_OoM_Settings
 
+## Localization files
+localization\enUS.lua
+localization\ruRU.lua
+
 ## Core modules
 modules\loader.lua
 modules\settings.lua
@@ -14,10 +18,6 @@ modules\ui_display.lua
 modules\gui_framework.lua
 modules\config_gui.lua
 modules\minimap_button.lua
-
-## Localization files
-localization\enUS.lua
-localization\ruRU.lua
 
 ## Test modules
 tests\test_module.lua
