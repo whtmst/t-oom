@@ -3,7 +3,7 @@ T-OoM Minimap Button
 Draggable minimap button for T-OoM addon configuration access
 Перемещаемая кнопка у миникарты для доступа к настройкам T-OoM
 
-WoW 1.12.1 Compatible Minimap Button
+WoW 1.12.0 Compatible Minimap Button
 --]]
 
 -- Create Minimap Button module

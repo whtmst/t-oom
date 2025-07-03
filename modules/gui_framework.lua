@@ -3,7 +3,7 @@ T-OoM GUI Framework
 Base GUI framework for T-OoM addon interface components
 Базовый GUI фреймворк для компонентов интерфейса аддона T-OoM
 
-WoW 1.12.1 Compatible GUI Components
+WoW 1.12.0 Compatible GUI Components
 --]]
 
 -- Create GUI Framework module
@@ -33,12 +33,12 @@ local COLORS = {
     CLOSE_BUTTON = {0.8, 0.2, 0.2, 1.0}      -- Red for close button
 }
 
--- Font paths for WoW 1.12.1 (ASCII compatible)
+-- Font paths for WoW 1.12.0 (ASCII compatible)
 local FONTS = {
     NORMAL = "Fonts\\FRIZQT__.TTF",
     BOLD = "Fonts\\MORPHEUS.TTF",
     CUSTOM = "Interface\\AddOns\\T-OoM\\fonts\\ARIALN.ttf"
-    -- Note: Unicode emoji fonts (NCE.ttf) not supported in WoW 1.12.1
+    -- Note: Unicode emoji fonts (NCE.ttf) not supported in WoW 1.12.0
     -- Use ASCII alternatives: <3 ❤️, * ★, --> ➡️, (c) ©, (tm) ™
 }
 
@@ -422,7 +422,7 @@ function GUIFramework:CreateLabel(text, parent, fontObject)
     return label
 end
 
--- Create footer with ASCII symbols (WoW 1.12.1 compatible)
+-- Create footer with ASCII symbols (WoW 1.12.0 compatible)
 function GUIFramework:CreateFooter(text, parent, fontTemplate)
     local footerName = GenerateFrameName("T_OoM_Footer")
     
@@ -439,12 +439,12 @@ function GUIFramework:CreateFooter(text, parent, fontTemplate)
     local footerText = footer:CreateFontString(nil, "OVERLAY", fontTemplate)
     footerText:SetPoint("CENTER", footer, "CENTER", 0, 0)
     
-    -- Use standard WoW font since emoji doesn't work in 1.12.1
+    -- Use standard WoW font since emoji doesn't work in 1.12.0
     footerText:SetFont(FONTS.NORMAL, 9, "NONE")
     footerText:SetText(text)
     footerText:SetTextColor(COLORS.TEXT_GRAY[1], COLORS.TEXT_GRAY[2], COLORS.TEXT_GRAY[3], COLORS.TEXT_GRAY[4])
     
-    DEFAULT_CHAT_FRAME:AddMessage(DEBUG_PREFIX .. " Footer created with ASCII symbols (WoW 1.12.1 compatible)")
+    DEFAULT_CHAT_FRAME:AddMessage(DEBUG_PREFIX .. " Footer created with ASCII symbols (WoW 1.12.0 compatible)")
     
     -- Store references
     footer.text = footerText
@@ -556,7 +556,7 @@ function GUIFramework:RunTest()
     local testLabel = self:CreateLabel("This is a test label", testWindow, "GameFontNormalLarge")
     testLabel:SetPoint("TOP", testWindow, "TOP", 0, -40)
     
-    -- Test footer with ASCII symbols (WoW 1.12.1 compatible)
+    -- Test footer with ASCII symbols (WoW 1.12.0 compatible)
     local testFooter = self:CreateFooter("Made with <3 by Wht Mst (Mikhail Palagin)", testWindow)
     testFooter:SetPoint("BOTTOMLEFT", testWindow, "BOTTOMLEFT", 8, 8)
     testFooter:SetPoint("BOTTOMRIGHT", testWindow, "BOTTOMRIGHT", -8, 8)

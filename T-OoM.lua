@@ -8,9 +8,9 @@ Author: Mikhail Palagin (Wht Mst)
 Website: https://band.link/whtmst
 
 Compatibility:
-- Designed for World of Warcraft 1.12.1 (Vanilla)
+- Designed for World of Warcraft 1.12.0 (Vanilla)
 - Optimized for Turtle WoW server (supports IsInInstance() function)
-- Fallback logic for other 1.12.1 servers
+- Fallback logic for other 1.12.0 servers
 --]]
 
 -- T-OoM Main Coordinator File

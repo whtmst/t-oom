@@ -3,7 +3,7 @@ T-OoM Configuration GUI
 Main configuration window for T-OoM addon settings
 Главное окно настроек аддона T-OоM
 
-WoW 1.12.1 Compatible Configuration Interface
+WoW 1.12.0 Compatible Configuration Interface
 --]]
 
 -- Create Configuration GUI module
@@ -159,7 +159,7 @@ function ConfigGUI:CreateMessageSection(parent, gui)
         local innerEditBox = editBox.editBox
         innerEditBox:SetScript("OnTextChanged", function()
             local text = innerEditBox:GetText()
-            -- Truncate if over maxLen (no SetCursorPosition in 1.12.1)
+            -- Truncate if over maxLen (no SetCursorPosition in 1.12.0)
             if string.len(text) > maxLen then
                 text = string.sub(text, 1, maxLen)
                 innerEditBox:SetText(text)

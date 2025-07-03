@@ -43,7 +43,7 @@ local function SetLanguageWithFallback(langCode)
     local globalName = availableLanguages[langCode]
     local localeTable = nil
     
-    -- Direct access to global variables (WoW 1.12.1 compatible)
+    -- Direct access to global variables (WoW 1.12.0 compatible)
     if globalName == "T_OoM_Locale_enUS" then
         localeTable = T_OoM_Locale_enUS
     elseif globalName == "T_OoM_Locale_ruRU" then
@@ -105,7 +105,7 @@ function T_OoM_Localization:SetLanguage(langCode)
     local globalName = availableLanguages[fullLangCode]
     local localeTable = nil
     
-    -- Direct access to global variables (WoW 1.12.1 compatible)
+    -- Direct access to global variables (WoW 1.12.0 compatible)
     if globalName == "T_OoM_Locale_enUS" then
         localeTable = T_OoM_Locale_enUS
     elseif globalName == "T_OoM_Locale_ruRU" then
