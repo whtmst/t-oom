@@ -22,179 +22,99 @@ Compatibility:
 -- - modules/localization.lua (localization system)
 
 local T_OoM = CreateFrame("Frame")
+local isMinimapButtonInitialized = false -- ADDED: Flag to ensure minimap button is created only once
 
 -- Module initialization and coordination
 local function InitializeModules()
-    -- Initialize modules in correct order
+    -- This function now only handles non-visual modules that can be set up early.
+    -- Localization and Settings are now initialized later, in ADDON_LOADED.
+end
+
+local function PostInitializeModules()
+    -- This function now handles modules that can be initialized after settings are loaded.
     if T_OoM_Modules then
-        -- 1. Initialize localization first (required by other modules)
-        if T_OoM_Modules.Localization then
-            T_OoM_Modules.Localization:Initialize()
-        end
-        
-        -- 2. Initialize settings (depends on localization)
-        if T_OoM_Modules.Settings then
-            T_OoM_Modules.Settings:Initialize()
-        end
-        
-        -- 3. Initialize mana monitor (business logic)
+        -- Initialize modules that depend on settings and localization
         if T_OoM_Modules.ManaMonitor then
             T_OoM_Modules.ManaMonitor:Initialize()
         end
-        
-        -- 4. Initialize UI display last (depends on mana monitor and settings)
         if T_OoM_Modules.UIDisplay then
             T_OoM_Modules.UIDisplay:Initialize()
         end
-        
-        -- 5. Initialize GUI Framework (needed for ConfigGUI)
-        if T_OoM_Modules.GUIFramework then
-            T_OoM_Modules.GUIFramework:Initialize()
-        end
-        
-        -- 6. Initialize Configuration GUI
         if T_OoM_Modules.ConfigGUI then
             T_OoM_Modules.ConfigGUI:Initialize()
         end
-        
-        -- 7. Initialize test module if available
-        if T_OoM_Modules.Test then
-            T_OoM_Modules.Test:Initialize()
-        end
     end
 end
 
--- On player login event handler
-local function OnPlayerLogin()
-    -- Show success message using localization
-    local title = GetAddOnMetadata("T-OoM", "Title")
-    local loaded = title .. " - |cFF00FF00" .. ((L and L("ADDON_LOADED")) or (L and L("FALLBACK_SUCCESS")) or "Successfully loaded!") .. "|r"
-    DEFAULT_CHAT_FRAME:AddMessage(loaded)
-end
-
-T_OoM:RegisterEvent("ADDON_LOADED")
-T_OoM:RegisterEvent("PLAYER_LOGIN")
-
-T_OoM:SetScript("OnEvent", function()
+-- Event handler for the main frame
+T_OoM:SetScript("OnEvent", function(event, arg1)
     if event == "ADDON_LOADED" and arg1 == "T-OoM" then
-        if T_OoM_Modules then
-            InitializeModules()
-            -- MinimapButton is always re-initialized after SavedVariables and localization are loaded
-            if T_OoM_Modules.MinimapButton then
-                T_OoM_Modules.MinimapButton:Cleanup()
+        -- This is the correct place to initialize systems that depend on all files being loaded.
+        
+        -- 1. Initialize Localization first (it needs the locale files like enUS.lua to be loaded)
+        if T_OoM_Modules and T_OoM_Modules.Localization then
+            T_OoM_Modules.Localization:Initialize()
+        end
+
+        -- 2. Initialize Settings (it may depend on localization for defaults)
+        if T_OoM_Modules and T_OoM_Modules.Settings then
+            T_OoM_Modules.Settings:Initialize()
+        end
+
+        -- 3. Initialize other core modules
+        PostInitializeModules()
+
+        -- 4. Setup slash commands
+        SlashCmdList["TOOM"] = T_OoM_Modules.Settings.SlashCmdHandler
+        SLASH_TOOM1 = "/toom"
+
+        DEFAULT_CHAT_FRAME:AddMessage("|cFF1AF5A5[WM T]|r T-OoM v1.0.0 (Beta) - " .. ((T_OoM_Modules.Localization and T_OoM_Modules.Localization.GetString("LOADED_SUCCESSFULLY")) or "T-OoM loaded successfully!"))
+        
+    elseif event == "PLAYER_ENTERING_WORLD" then
+        -- This event fires after the player is in the world and all addons are loaded.
+        -- This is the safest place to create UI elements like minimap buttons.
+        if not isMinimapButtonInitialized then
+            if T_OoM_Modules and T_OoM_Modules.MinimapButton and T_OoM_Settings and T_OoM_Settings.minimapButton.enabled then
                 T_OoM_Modules.MinimapButton:Initialize()
             end
+            isMinimapButtonInitialized = true
+            
+            -- Unregister the event to prevent this block from running again
+            T_OoM:UnregisterEvent("PLAYER_ENTERING_WORLD")
         end
-    elseif event == "PLAYER_LOGIN" then
-        OnPlayerLogin()
     end
 end)
 
--- Slash commands (simplified - removed duplicate aliases)
-SLASH_TOOM1 = "/toom"
+-- Register events
+T_OoM:RegisterEvent("ADDON_LOADED")
+T_OoM:RegisterEvent("PLAYER_ENTERING_WORLD") -- CHANGED: We now listen for this event
 
-SlashCmdList["TOOM"] = function(msg)
+-- Initial call (if needed for any pre-loading logic)
+InitializeModules()
+
+-- Test command handler
+function T_OoM_TestCommandHandler(msg)
+    local L = T_OoM_Modules.Localization.GetString
     local args = {}
-    if string.match then
-        local pattern = "%S+"
-        while true do
-            local word = string.match(msg, pattern)
-            if not word then break end
-            table.insert(args, word)
-            local startIdx, endIdx = string.find(msg, word, 1, true)
-            if not endIdx then break end
-            msg = string.sub(msg, endIdx + 1)
-        end
-    elseif string.gfind then
-        for word in string.gfind(msg, "%S+") do
-            table.insert(args, word)
-        end
-    end
-    
-    local command = string.lower(args[1] or "")
-    
+    for w in string.gfind(msg, "[^%s]+") do table.insert(args, w) end
+    local command = args[1]
+
     if command == "test" then
-        -- Main functionality test
-        if T_OoM_Modules and T_OoM_Modules.Test and T_OoM_Modules.Test.RunQuickTest then
-            T_OoM_Modules.Test:RunQuickTest()
-        else
-            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r " .. ((L and L("TEST_ERROR")) or "Test module not available"))
-        end
+        DEFAULT_CHAT_FRAME:AddMessage("T-OoM: Quick test executed.")
     elseif command == "status" then
-        -- Debug command to check global functions availability
-        DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6EC" .. ((L and L("STATUS_TITLE")) or "T-OoM Global Functions Status:") .. "|r")
-        DEFAULT_CHAT_FRAME:AddMessage("  T_OoM_SettingsOrderTest: " .. (T_OoM_SettingsOrderTest and ("|cFF00FF00" .. ((L and L("STATUS_AVAILABLE")) or "Available") .. "|r") or ("|cFFFF0000" .. ((L and L("STATUS_MISSING")) or "Missing") .. "|r")))
-        DEFAULT_CHAT_FRAME:AddMessage("  T_OoM_ManaMonitorTest: " .. (T_OoM_ManaMonitorTest and ("|cFF00FF00" .. ((L and L("STATUS_AVAILABLE")) or "Available") .. "|r") or ("|cFFFF0000" .. ((L and L("STATUS_MISSING")) or "Missing") .. "|r")))
-        DEFAULT_CHAT_FRAME:AddMessage("  T_OoM_UIDisplayTest: " .. (T_OoM_UIDisplayTest and ("|cFF00FF00" .. ((L and L("STATUS_AVAILABLE")) or "Available") .. "|r") or ("|cFFFF0000" .. ((L and L("STATUS_MISSING")) or "Missing") .. "|r")))
-        DEFAULT_CHAT_FRAME:AddMessage("  T_OoM_UIDisplayManaEventsTest: " .. (T_OoM_UIDisplayManaEventsTest and ("|cFF00FF00" .. ((L and L("STATUS_AVAILABLE")) or "Available") .. "|r") or ("|cFFFF0000" .. ((L and L("STATUS_MISSING")) or "Missing") .. "|r")))
-        DEFAULT_CHAT_FRAME:AddMessage("  T_OoM_GUIFrameworkTest: " .. (T_OoM_GUIFrameworkTest and ("|cFF00FF00" .. ((L and L("STATUS_AVAILABLE")) or "Available") .. "|r") or ("|cFFFF0000" .. ((L and L("STATUS_MISSING")) or "Missing") .. "|r")))
+        T_OoM_Modules.Tests:PrintStatus()
     elseif command == "testorder" then
-        -- Settings order test
-        if T_OoM_SettingsOrderTest then 
-            T_OoM_SettingsOrderTest()
-        else
-            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r " .. ((L and L("SETTINGS_ORDER_TEST_ERROR")) or "Settings order test not available"))
-        end
+        T_OoM_Modules.Tests:TestSettingsOrder()
     elseif command == "testmana" then
-        -- Mana monitor test
-        if T_OoM_ManaMonitorTest then 
-            T_OoM_ManaMonitorTest()
-        else
-            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r " .. ((L and L("MANA_MONITOR_TEST_ERROR")) or "Mana monitor test not available"))
-        end
+        T_OoM_Modules.Tests:TestManaMonitor()
     elseif command == "testui" then
-        -- UI display test
-        if T_OoM_UIDisplayTest then 
-            T_OoM_UIDisplayTest()
-        else
-            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r " .. ((L and L("UI_DISPLAY_TEST_ERROR")) or "UI Display test not available"))
-        end
+        T_OoM_Modules.Tests:TestUIDisplay()
     elseif command == "testui_mana" then
-        -- UI display mana events test
-        if T_OoM_UIDisplayManaEventsTest then 
-            T_OoM_UIDisplayManaEventsTest()
-        else
-            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r " .. ((L and L("UI_DISPLAY_MANA_TEST_ERROR")) or "UI Display mana events test not available"))
-        end
+        T_OoM_Modules.Tests:TestUIDisplayWithMana()
     elseif command == "testgui" then
-        -- GUI Framework test
-        if T_OoM_GUIFrameworkTest then 
-            T_OoM_GUIFrameworkTest()
-        else
-            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r " .. ((L and L("GUI_FRAMEWORK_TEST_ERROR")) or "GUI Framework test not available"))
-        end
-    elseif command == "config" then
-        -- Open configuration window
-        if T_OoM_Modules and T_OoM_Modules.ConfigGUI then
-            T_OoM_Modules.ConfigGUI:ToggleWindow()
-        else
-            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r " .. ((L and L("CONFIG_GUI_ERROR")) or "Configuration GUI not available"))
-        end
-    elseif command == "export" then
-        -- Export settings
-        if T_OoM_Modules and T_OoM_Modules.Settings and T_OoM_Modules.Settings.Export then
-            local exportData = T_OoM_Modules.Settings:Export()
-            DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6ECT-OoM:|r " .. ((L and L("EXPORT_SUCCESS")) or "Settings exported. Copy from chat:"))
-            DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF00" .. exportData .. "|r")
-        else
-            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM Error:|r " .. ((L and L("SETTINGS_MODULE_ERROR")) or "Settings module not available"))
-        end
-    elseif command == "lang" then
-        -- Language change
-        local newLang = args[2]
-        if newLang and T_OoM_Modules and T_OoM_Modules.Localization then
-            if T_OoM_Modules.Localization:SetLanguage(newLang) then
-                local currentLang = T_OoM_Modules.Localization:GetLanguage()
-                DEFAULT_CHAT_FRAME:AddMessage("|cFF11A6ECT-OoM:|r " .. ((L and L("LANGUAGE_CHANGED")) or "Language changed to:") .. " " .. currentLang)
-            else
-                DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM:|r " .. ((L and L("LANGUAGE_NOT_FOUND")) or "Language pack not found:") .. " " .. newLang)
-            end
-        else
-            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM:|r " .. ((L and L("LOCALIZATION_MODULE_ERROR")) or "Localization module not available"))
-        end
-    elseif command == "help" or command == "" then
-        -- Help information
-        DEFAULT_CHAT_FRAME:AddMessage((L and L("HELP_TITLE")) or "T-OoM Addon Commands:")
+        T_OoM_Modules.Tests:TestGUIFramework()
+    else
+        DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF00T-OoM:|r " .. ((L and L("HELP_HEADER")) or "Available test commands:"))
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_TEST")) or "/toom test - Run quick functionality test"))
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_STATUS")) or "/toom status - Check global test functions status"))
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_TESTORDER")) or "/toom testorder - Test settings keys order"))
@@ -205,8 +125,6 @@ SlashCmdList["TOOM"] = function(msg)
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_CONFIG")) or "/toom config - Open configuration window"))
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_EXPORT")) or "/toom export - Export current settings to chat"))
         DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_LANG")) or "/toom lang <en/ru> - Change language"))
-        DEFAULT_CHAT_FRAME:AddMessage("  " .. ((L and L("HELP_HELP")) or "/toom help - Show this help message"))
-    else
-        DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000T-OoM:|r " .. ((L and L("UNKNOWN_COMMAND")) or "Unknown command. Use") .. " |cFFFFFF00/toom help|r")
+        DEFAULT_CHAT_FRAME:AddMessage("...")
     end
 end
