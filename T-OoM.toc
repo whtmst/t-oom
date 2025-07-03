@@ -1,4 +1,4 @@
-## Interface: 11201
+## Interface: 11200
 ## Title: [ |cFFFFFFFFWM|r ] |cFF11A6ECT-OoM|r |cFF7FFF7Fv1.0.0 (Beta)|r
 ## Author: Mikhail Palagin (Wht Mst)
 ## Version: 1.0.0 Beta
