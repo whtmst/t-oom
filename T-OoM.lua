@@ -9,7 +9,7 @@ Website: https://band.link/whtmst
 
 Compatibility:
 - Designed for World of Warcraft 1.12.0 (Vanilla)
-- Optimized for Turtle WoW server (supports IsInInstance() function)
+- Optimized for Turtle WoW server
 - Fallback logic for other 1.12.0 servers
 --]]
 
